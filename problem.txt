@@ -1,0 +1,5 @@
+The problem is that all todo apps have their own functions, and those functions loved by me
+so much not present in one program. So i need my own Task Manager to use it with pleasant.
+Problems:
+1. I dont know which task i need to do now. Why not another task now?
+2. A lot of related tasks

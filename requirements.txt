@@ -1,0 +1,12 @@
+1. Tasks relations has tree structure. It means every task can have list of childs tasks and one parent.
+Tasks are considered to be done if all child tasks have completion percentage 100%.
+2. Task must have:
+    1.Priority: None,Lowest,Low,Middle,High,Highest
+    3.Description
+    4.Parent task
+    5.List of childs
+    6.Name
+    7.Completion percentage
+    8.Order if task has siblings
+3.There must to be a function that analyze the task tree and place tasks in line presentation by their priorities,order and
+completion percentage

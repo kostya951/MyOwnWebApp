@@ -1,0 +1,15 @@
+{
+  "name": "kostya/todo",
+  "description": "Task management app",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "kostya",
+      "email": "kostya.instream@gmail.com"
+    }
+  ],
+  "require": {
+    
+  }
+}
