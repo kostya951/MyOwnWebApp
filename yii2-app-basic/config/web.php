@@ -59,7 +59,7 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                "<controller:todo>/<action:index>/<id:\d+>"=>"<controller>/<action>"
+                "<controller:todo>/<action:index>/<id:\d+>"=>"<controller>/<action>",
             ],
         ],
     ],

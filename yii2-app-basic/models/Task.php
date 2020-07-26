@@ -28,7 +28,7 @@ class Task extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'TASK';
+        return 'task';
     }
 
     /**
@@ -37,14 +37,12 @@ class Task extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'parent', 'completion', 'order', 'priority', 'status'], 'number'],
+            [['id', 'completion', 'order', 'priority', 'status'], 'number'],
             [['name'], 'required'],
             [['name'], 'string', 'max' => 100],
             [['description'], 'string', 'max' => 500],
             [['id'], 'unique'],
-            [['priority'], 'exist', 'skipOnError' => true, 'targetClass' => Priority::className(), 'targetAttribute' => ['priority' => 'id']],
             [['duration'],'number','min'=>1],
-            [['parent'],'number']
         ];
     }
 
@@ -55,8 +53,8 @@ class Task extends \yii\db\ActiveRecord
             'datetime' => [
                 'class' => TimestampBehavior::className(),
                 'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => 'CREATED',
-                    ActiveRecord::EVENT_BEFORE_UPDATE => 'LAST_UPDATED',
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'created',
+                    ActiveRecord::EVENT_BEFORE_UPDATE => 'last_updated',
                 ],
                 'value' => function() { return date('d.m.yy H:i:s'); },
             ],
@@ -76,7 +74,7 @@ class Task extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'id',
+            'id' => 'Id',
             'name' => 'Name',
             'description' => 'Description',
             'parent' => 'Parent',
@@ -93,20 +91,11 @@ class Task extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getpriority()
+    public function getPriority()
     {
-        return $this->hasOne(Priority::className(), ['id' => 'priority']);
+        return $this->hasOne(Priority::className(), ['id' => 'priority'])->one();
     }
 
-    /**
-     * Gets query for [[TaskChildren]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTaskChildren()
-    {
-        return $this->hasMany(TaskChild::className(), ['TASK' => 'id']);
-    }
     public function setUser($value){
         $this->user=$value;
     }

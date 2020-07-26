@@ -6,7 +6,7 @@ namespace app\models\steel_life;
 
 class Field
 {
-    private $rowsAmount;
+    private $rowsAmount=5;
     private $columnsAmount=5;
     public $trigers;
     public $history=[];
@@ -72,13 +72,19 @@ class Field
     }
 
     public function deselectTriger($triger){
-        if($triger->isActivated()){
-            $triger->setWait();
-            unset($this->history[count($this->history)-1]);
-            return true;
+        $triger->setWait();
+        array_pop($this->history);
+        return true;
+    }
+    public function unsetWaitTrigers($wait_trigers,$selected_triger){
+        foreach ($wait_trigers as $wait_triger){
+            if($wait_triger === $selected_triger){
+                continue;
+            }else{
+                $wait_triger->setUnactivated();
+            }
         }
     }
-
     public function setWaitTrigers($triger){
         $result = [];
         $tmp = $triger;
@@ -138,7 +144,7 @@ class Field
                 $wait_trigers = $field->setWaitTrigers($triger);
                 if(count($wait_trigers)==0){
                     if($field->isAllActivated()){
-                        return $field;
+                        return $field->history;
                     }else{
                         return null;
                     }
@@ -148,6 +154,7 @@ class Field
                 if($answer!=null){
                     return $answer;
                 }
+                //$field->unsetWaitTrigers($wait_trigers,$triger);
                 $field->deactivateLine($last_triger,$triger);
                 $field->deselectTriger($triger);
             }

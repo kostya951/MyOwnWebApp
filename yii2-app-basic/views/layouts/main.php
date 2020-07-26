@@ -22,7 +22,7 @@ TodoAssets::register($this);
 </head>
 <body>
 <?php $this->beginBody() ?>
-<div class="container-fluid vh-100">
+<div class="container-fluid">
         <?= $content ?>
 </div>
 <?php $this->endBody() ?>

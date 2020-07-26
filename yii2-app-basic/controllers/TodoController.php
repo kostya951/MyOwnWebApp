@@ -15,11 +15,35 @@ class TodoController extends Controller{
         $this->layout= 'todo';
         return $this->render('list',['user'=>$id]);
     }
+
     public function actionDelete(){
         $model = Task::find()->where(['id'=>Yii::$app->request->get('id')])->one();
         $model->delete();
         $this->redirect(Url::toRoute("todo/index/".Yii::$app->user->id));
     }
+
+    public function actionView(){
+        $model = Task::find()->where(['id'=>Yii::$app->request->get('id')])->one();
+        $this->layout='todo';
+        $priority = $model->getPriority();
+        return $this->render('view',['model'=>$model]);
+    }
+
+    public function actionUpdate(){
+        if(Yii::$app->request->getIsGet()) {
+            $model = Task::find()->where(['id' => Yii::$app->request->get('id')])->one();
+            return $this->render('create',['model'=>$model,'update'=>true]);
+        }else if(Yii::$app->request->getIsPost()){
+            $form = Yii::$app->request->post();
+            $model = Task::findOne(['id'=>$form['Task']['id']]);
+            $model->load($form);
+            unset($model->id);
+            if($model->save()){
+                $this->redirect(Url::toRoute("todo/index/".Yii::$app->user->id));
+            }
+        }
+    }
+
     public function actionCreate(){
         if(Yii::$app->user->isGuest){
             $this->redirect(Url::toRoute('default/login'));
@@ -28,32 +52,13 @@ class TodoController extends Controller{
         if($model->load(Yii::$app->request->post())){
             $user = TodoUser::findOne(['id'=>Yii::$app->user->id]);
             $model->setAttribute('user', $user->id);
-            $parent = $model->getAttribute('parent');
-            $_parent = null;
             if($model->validate())
             {
-                if(!empty($parent)){
-                    $_parent = Task::findOne(['id'=>$model->getAttribute("parent")]);
-                    if(isset($_parent)) {
-                        $model->setAttribute('parent', $_parent->getAttribute('id'));
-                        if($model->save()) {
-                            return $this->render('create', ['model' => $model]);
-                        }
-                    }else{
-                        $model->addError(null, 'Parent Task not found');
-                    }
-                }else{
-                    $sql=<<<sql
-SELECT PARAMETER,VALUE FROM NLS_SESSION_PARAMETERS
-sql;
-
-                    $query = Yii::$app->getDb()->createCommand($sql)->queryAll();
-                    if($model->save()) {
-                        return $this->render('create', ['model' => $model]);
-                    }
+                if($model->save()) {
+                    return $this->render('create', ['model' => $model,'update'=>false]);
                 }
             }
         }
-        return $this->render('create',['model'=>$model]);
+        return $this->render('create',['model'=>$model,'update'=>false]);
     }
 }

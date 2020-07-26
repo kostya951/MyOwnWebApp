@@ -41,13 +41,18 @@ TodoAssets::register($this);
                         'class'=>'navbar-light'
                     ]
                 ]);
+                if(Yii::$app->params['lifeEnabled']) {
+                    $lifeButton = ['label' => 'SteelLife', 'url' => ['life/index']];
+                }else {
+                    $lifeButton = '';
+                }
                 echo Nav::widget([
                     'options'=>[
                         'class'=>'nav nav-pills navbar-right'
                     ],
                     'items'=> [
                         ['label'=>'Create new TODO','url'=>['todo/create']],
-                        ['label'=>'SteelLife','url'=>['life/index']]
+                        $lifeButton
                     ]
                 ]);
                 NavBar::end();

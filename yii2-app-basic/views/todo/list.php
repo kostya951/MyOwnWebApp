@@ -3,14 +3,16 @@ use app\models\Task;
 use yii\data\ActiveDataProvider;
 use yii\grid\GridView;
 
-$query = Task::find()->select(['name'
-    ,'parent'
+$query = Task::find()->select([
+    'id'
+    ,'name'
+    ,'description'
     ,'duration'
     ,'completion'
     ,'priority'
     ,'status'
-    ,"CONVERT(DATETIME,\"CREATED\",104)"
-    ,"CONVERT(DATETIME,\"LAST_UPDATED\",104)"])->from('task')->orderBy("id");
+    ,'created'
+    ,'last_updated'])->from('task')->orderBy('id');
 $dataProvider = new ActiveDataProvider([
     'query' => $query,
     'pagination' => [
@@ -22,17 +24,19 @@ echo GridView::widget([
     'columns'=>[
         'id',
         'name',
-        'parent',
         'description',
         'duration',
         'completion',
         'priority',
         'status',
         [
-            'attribute' => 'created:datetime',
+            'attribute' => 'created',
             'format'=>['datetime','dd.MM.Y H:i']
         ],
-        'last_updated:datetime',
+        [
+            'attribute'=>'last_updated',
+            'format'=>['datetime','dd.MM.Y H:i']
+        ],
         ['class'=>'yii\grid\ActionColumn']
     ]
 ]);
